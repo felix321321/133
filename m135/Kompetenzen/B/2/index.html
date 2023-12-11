@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotto</title>
+    <style>
+        :root{
+            --ballsize: 40px;
+        }
+        ul{
+            display: flex;
+            flex-direction: row;
+        }
+
+        li {
+            display: block;
+            width: var(--ballsize);
+            height: var(--ballsize);
+            border: 1px solid black;
+            border-radius: var(--ballsize);
+            text-align: center;
+            line-height: var(--ballsize);
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lottozahlen</h1>
+    <ul id="lotto">
+    </ul>
+
+    <h1>Zusatzzahl</h1>
+    <ul id="zusatz"></ul>
+    <script src="js/script.js" defer></script>
+</body>
+</html>
