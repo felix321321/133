@@ -4,17 +4,44 @@
   <title>Öffnungszeiten</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Öffnungszeiten</h1>
+  <h1>Stundenplan GIBM</h1>
 
-  <label for="dropdown">Wählen Sie eine Filiale:</label>
-  <select id="dropdown">
+  <label for="BerufsgruppeDropdown">Berufsgruppe</label>
+  <select id="BerufsgruppeDropdown">
   </select>
 
-  <button id="button">Clear Storage</button>
+  <br> <!-- Line break here -->
 
-  <div id="div"></div>
+  <label for="KlasseDropdown">Klassenauswahl</label>
+  <select id="KlasseDropdown">
+  </select>
+
+  <br> <!-- Line break here -->
+
+  <input type="date" id="start" name="date" />
+
+  <br> <!-- Line break here -->
+
+  <div id="div">
+    <table>
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Wochentag</th>
+          <th>Von</th>
+          <th>Bis</th>
+          <th>Lehrer</th>
+          <th>Fach</th>
+          <th>Raum</th>
+        </tr>
+      </thead>
+      
+    </table>
+
+  </div>
   
 
   <script src="js/script.js" defer></script>
