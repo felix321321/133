@@ -9,8 +9,7 @@ async function getDataBeruf() {
             dropdown.empty();
 
             $.each(response, function(index, beruf) {
-                const option = $("<option>").val(beruf.beruf_name).text(beruf.beruf_name);
-                console.log(beruf.beruf_name);
+                const option = $("<option>").val(beruf.beruf_id).text(beruf.beruf_name);
                 dropdown.append(option);
             });
         }
@@ -19,56 +18,41 @@ async function getDataBeruf() {
 
 async function getDataKlasse() {
     $.ajax({
-        url: "http://sandbox.gibm.ch/klassen.php?beruf_id=" + $("#BerufsgruppeDropdown").val(),
+        url: "http://sandbox.gibm.ch/klassen.php",
         method: "GET",
         dataType: "json",
         success: function(response) {
-            const dropdown = $("#KlassenDropdown");
+            const dropdown = $("#KlasseDropdown");
 
             dropdown.empty();
 
-            console.log(response);
-
             $.each(response, function(index, klasse) {
-                const option = $("<option>").val(klasse.name);
+                const option = $("<option>").val(klasse.klasse_id).text(klasse.klasse_longname);
                 dropdown.append(option);
             });
-            $("#BerufsgruppeDropdown").val(localStorage.getItem("Beruf_name"));
         }
     });
 }
 
-function setItem() {
-    $("#div").empty()
-    const table = $("<table>");
-    const thead = $("<thead>");
-    const tbody = $("<tbody>");
-    
-    const headerRow = $("<tr>");
-
-    const headers = ["stadt", "strasse", "oeffnungszeiten"];
-
-    headers.forEach(header => {
-        const th = $("<th>").text(header);
-        headerRow.append(th);
-    });
-
-    thead.append(headerRow);
-    table.append(thead);
-
-    const row = $("<tr>");
-    headers.forEach(header => {
-        const cell = $("<td>").text(localStorage.getItem(header));
-        row.append(cell);
-    });
-    tbody.append(row);
-
-    table.append(tbody);
-
-    $("#div").empty().append(table);
-    }
-
 document.addEventListener("DOMContentLoaded", () => {
     getDataBeruf();
     getDataKlasse();
+    BerufsgruppeDropdown.addEventListener("change", (event) => {
+        $.ajax({
+            url: "http://sandbox.gibm.ch/klassen.php?beruf_id=" + event.target.value,
+            method: "GET",
+            dataType: "json",
+            success: function(response) {
+                const dropdown = $("#KlasseDropdown");
+    
+                dropdown.empty();
+    
+                $.each(response, function(index, klasse) {
+                    const option = $("<option>").val(klasse.klasse_id).text(klasse.klasse_longname);
+                    dropdown.append(option);
+                });
+            }
+        });
+    });
+    
 });
