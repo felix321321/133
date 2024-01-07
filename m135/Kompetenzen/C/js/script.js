@@ -22,6 +22,7 @@ Date.prototype.getWeek = function () {
   );
 };
 
+//Funktion um Berufe zu laden
 async function getDataBeruf() {
   $.ajax({
     url: "http://sandbox.gibm.ch/berufe.php",
@@ -38,6 +39,7 @@ async function getDataBeruf() {
   });
 }
 
+//Funktion um Klassen zu laden
 async function getDataKlasse() {
   $.ajax({
     url: "http://sandbox.gibm.ch/klassen.php",
@@ -56,6 +58,8 @@ async function getDataKlasse() {
   });
 }
 
+//Rechnet das Datum in die Kalenderwoche um
+//Das Html Element zum Wochen auswählen anstelle von Tagen wird nur teils unterstützt
 function calculateDate() {
   var date = new Date($("#date").val());
   const week = date.getWeek();
@@ -63,7 +67,9 @@ function calculateDate() {
   return week + "-" + year;
 }
 
+//Funktion um den Stundenplan zu aktualisieren / bauen
 function updateTable(response) {
+    $("#spinner").show();
   $("#table").empty();
 
   const table = $("<table>");
@@ -130,17 +136,26 @@ function updateTable(response) {
     $("#table").empty();
   } else if (response.length === 0) {
     $("#table").empty();
-    showUpdateMessage("Letztes Update: " + new Date().toLocaleString());
+    showUpdateMessage("Letztes Update: " + new Date().toLocaleString() + " - Keine Daten gefunden");
   } else {
     showUpdateMessage("Letztes Update: " + new Date().toLocaleString());
   }
+  //timeout of 1 seconds to show the spinner
+    setTimeout(hideSpinner, 1000);
 }
 
+//Funktion um den Spinner zu verstecken / Kompetenz C12
+function hideSpinner() {
+    $("#spinner").hide();
+  }
+
+//Funktion um eine Update Nachricht zu erstellen um den Benutzer zu informieren
 function showUpdateMessage(message) {
     const updateMessageElement = document.getElementById("updateMessage");
     updateMessageElement.textContent = message;
   }
 
+//Funktion um die Daten aus dem Webstorage zu laden, funktioniert jedoch leider nur beim Datum
 async function getDataWebstorage() {
     const beruf_id = localStorage.getItem("beruf_id");
     const beruf_name = localStorage.getItem("beruf_name");
@@ -191,10 +206,12 @@ async function getDataWebstorage() {
     
 }
 
+//Funktion welche beim Laden der Seite ausgeführt wird, sobald diese bereit ist und Event listener initialisert
 document.addEventListener("DOMContentLoaded", () => {
   getDataWebstorage();
   getDataBeruf();
   getDataKlasse();
+  $("#spinner").hide();
   showUpdateMessage("Letztes Update: " + new Date().toLocaleString());
   BerufsgruppeDropdown.addEventListener("change", (event) => {
     $.ajax({
@@ -217,6 +234,9 @@ document.addEventListener("DOMContentLoaded", () => {
             .text(klasse.klasse_longname);
           dropdown.append(option);
         });
+      },
+      error: function (response) {
+        showUpdateMessage("Letztes Update: " + new Date().toLocaleString() + " - Fehler beim Laden der Klassen");
       },
     });
   });
